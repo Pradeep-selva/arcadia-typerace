@@ -22,6 +22,7 @@ func (H *hub) Run() {
 				H.Rooms[s.Room] = connection
 			}
 			H.Rooms[s.Room][s.Conn] = true
+
 		case s := <-H.UnRegister:
 			connections := H.Rooms[s.Room]
 			if connections != nil {
@@ -34,6 +35,7 @@ func (H *hub) Run() {
 					}
 				}
 			}
+			
 		case m := <-H.Broadcast:
 			connections := H.Rooms[m.Room]
 			for c := range connections {

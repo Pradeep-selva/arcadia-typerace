@@ -35,7 +35,6 @@ func (s subscription) readPump() {
 
 	for {
 		_, msg, err := c.Ws.ReadMessage()
-		utils.LogSuccess(string(msg))
 		if err != nil {
 			utils.LogError(err.Error())
 		}
