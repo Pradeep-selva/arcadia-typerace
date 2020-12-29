@@ -66,6 +66,7 @@ func (s *subscription) writePump() {
 	for {
 		select {
 		case message, ok := <- c.Send:
+			utils.LogReceived(string(message))
 			if !ok {
 				c.write(websocket.CloseMessage, []byte{})
 				utils.LogError("Websocket closed")
