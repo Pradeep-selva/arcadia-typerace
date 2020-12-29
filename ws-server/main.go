@@ -15,9 +15,9 @@ func main(){
 
 	var PORT string = ":5500"
 
-	http.Handle("/", http.FileServer(http.Dir("../client-ui")))
-	http.HandleFunc("/ws/race/", func(w http.ResponseWriter, r *http.Request){
-		roomId := strings.Split(r.URL.Path, "/")[3]
+	http.Handle("/", http.FileServer(http.Dir("../client")))
+	http.HandleFunc("/ws/", func(w http.ResponseWriter, r *http.Request){
+		roomId := strings.Split(r.URL.Path, "/")[2]
 		ws.ServeWs(w,r,roomId)
 	})
 
