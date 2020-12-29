@@ -1,21 +1,12 @@
 package ws
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
 	t "github.com/pradeep-selva/arcadia-typerace/ws-server/pkg/types"
 	"github.com/pradeep-selva/arcadia-typerace/ws-server/utils"
 )
-
-var upgrader = websocket.Upgrader{
-	ReadBufferSize: 1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func (r * http.Request) bool {
-		return true
-	},
-}
 
 const (
 	writeWait = 10 * time.Second
