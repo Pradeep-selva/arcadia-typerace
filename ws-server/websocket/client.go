@@ -55,3 +55,44 @@ func (s subscription) readPump() {
 		h.Broadcast <- m
 	}
 }
+
+func (c *connection) write(mType int, payload []byte) error {
+	c.Ws.SetWriteDeadline(time.Now().Add(writeWait))
+	return c.Ws.WriteMessage(mType, payload)
+}
+
+func (s *subscription) writePump() {
+	conn := s.Conn
+	var c connection = connection(*conn)
+
+	ticker := time.NewTicker(pingWait)
+
+	defer func(){
+		ticker.Stop()
+		c.Ws.Close()
+	}()
+
+	for {
+		select {
+		case message, ok := <- c.Send:
+			if !ok {
+				c.write(websocket.CloseMessage, []byte{})
+				utils.LogError("Websocket closed")
+				return
+			}
+
+			if err := c.write(websocket.TextMessage, message); 
+			err != nil {
+				utils.LogError("An error occurred while sending message")
+				return
+			}
+
+		case <-ticker.C:
+			if err := c.write(websocket.PingMessage, []byte{});
+			err != nil {
+				utils.LogError("An error occured while sending ping message")
+				return
+			}
+		}
+	}
+}
