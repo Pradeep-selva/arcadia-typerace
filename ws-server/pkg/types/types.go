@@ -2,26 +2,26 @@ package types
 
 import "github.com/gorilla/websocket"
 
-type message struct {
-	data []byte
-	race string
+type Message struct {
+	Data []byte
+	Room string
 }
 
-type connection struct {
-	ws *websocket.Conn
-	send chan []byte
+type Connection struct {
+	Ws *websocket.Conn
+	Send chan []byte
 }
 
-type subscription struct {
-	conn *connection
-	race string
+type Subscription struct {
+	Conn *Connection
+	Room string
 }
 
-type hub struct {
-	races map[string]map[*connection]bool
-	broadcast chan message
-	register chan subscription
-	unregister chan subscription
+type Hub struct {
+	Rooms map[string]map[*Connection]bool
+	Broadcast chan Message
+	Register chan Subscription
+	UnRegister chan Subscription
 }
 
 
