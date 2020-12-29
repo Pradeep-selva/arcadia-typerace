@@ -31,7 +31,7 @@ func (s subscription) readPump() {
 	c := s.Conn
 
 	defer func () {
-		h.UnRegister <- t.Subscription(s)
+		H.UnRegister <- t.Subscription(s)
 		c.Ws.Close()
 	}()
 
@@ -44,6 +44,7 @@ func (s subscription) readPump() {
 
 	for {
 		_, msg, err := c.Ws.ReadMessage()
+		utils.LogSuccess(string(msg))
 		if err != nil {
 			utils.LogError(err.Error())
 		}
@@ -52,7 +53,7 @@ func (s subscription) readPump() {
 			Data: msg,
 			Room: s.Room,
 		}
-		h.Broadcast <- m
+		H.Broadcast <- m
 	}
 }
 

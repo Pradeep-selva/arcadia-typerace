@@ -7,7 +7,7 @@ import (
 	"github.com/pradeep-selva/arcadia-typerace/ws-server/utils"
 )
 
-func serveWs(w http.ResponseWriter, r *http.Request, roomId string) {
+func ServeWs(w http.ResponseWriter, r *http.Request, roomId string) {
 	utils.LogSuccess("ROOM --> " + roomId)
 
 	socket, err := upgrader.Upgrade(w,r,nil)
@@ -25,9 +25,11 @@ func serveWs(w http.ResponseWriter, r *http.Request, roomId string) {
 		Room: roomId,
 	}
 
-	h.Register <- s
+	
+	H.Register <- s
 
 	_s := subscription(s)
+	utils.LogSuccess(_s.Room)
 	go _s.readPump()
 	go _s.writePump()
 }
