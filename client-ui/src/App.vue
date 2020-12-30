@@ -1,18 +1,19 @@
 <template>
   <v-app>
     <v-main id="main">
-      <home />
+      <router-view />
+      <copyright-footer />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Home from "./views/Home.vue";
+import CopyrightFooter from "./components/Footer.vue";
 
 @Component({
   components: {
-    Home
+    CopyrightFooter: CopyrightFooter
   }
 })
 export default class App extends Vue {}
@@ -23,10 +24,10 @@ export default class App extends Vue {}
   background: rgb(12, 0, 38);
   background: linear-gradient(
     6deg,
-    rgba(12, 0, 38, 1) 10%,
-    rgba(12, 0, 50, 1) 48%,
-    rgba(11, 1, 64, 1) 63%,
-    rgba(0, 20, 92, 1) 93%
+    rgb(6, 0, 19) 10%,
+    rgb(11, 2, 41) 48%,
+    rgb(11, 3, 49) 63%,
+    rgb(0, 15, 68) 93%
   );
 }
 </style>

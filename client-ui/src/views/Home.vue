@@ -36,6 +36,14 @@
             Source Code
           </a>
         </p>
+        <v-row class="mt-16 d-flex justify-center">
+          <v-btn class="mr-10" color="grey lighten-1" outlined x-large>
+            Join Room
+          </v-btn>
+          <v-btn color="grey lighten-1" outlined x-large>
+            Create Room
+          </v-btn>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -50,6 +58,6 @@ export default class Home extends Vue {}
 
 <style>
 .container {
-  text-shadow: 2px 1px 2px rgba(150, 150, 150, 1);
+  text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);
 }
 </style>
