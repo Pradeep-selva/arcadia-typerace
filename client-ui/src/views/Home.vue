@@ -40,9 +40,7 @@
         </p>
         <v-row class="mt-16 d-flex justify-center">
           <join-dialog />
-          <v-btn color="grey lighten-1" outlined x-large>
-            Create Room
-          </v-btn>
+          <create-dialog />
         </v-row>
       </v-col>
     </v-row>
@@ -51,11 +49,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import JoinDialog from "../components/JoinDialog.vue";
+import { JoinDialog, CreateDialog } from "../components";
 
 @Component({
   components: {
-    JoinDialog
+    JoinDialog,
+    CreateDialog
   }
 })
 export default class Home extends Vue {}

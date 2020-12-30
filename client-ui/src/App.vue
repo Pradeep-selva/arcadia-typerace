@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import CopyrightFooter from "./components/Footer.vue";
+import { CopyrightFooter } from "./components";
 
 @Component({
   components: {
