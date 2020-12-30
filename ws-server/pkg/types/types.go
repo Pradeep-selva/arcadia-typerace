@@ -25,8 +25,8 @@ type Hub struct {
 }
 
 type ValidationResponse struct {
-	data string
-	ok bool
+	Data string `json:"data"`
+	Ok bool `json:"ok"`
 }
 
 

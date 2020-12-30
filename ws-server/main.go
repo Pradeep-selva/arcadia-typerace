@@ -16,6 +16,7 @@ func main() {
 
 	http.HandleFunc("/", controllers.HomeHandler)
 	http.HandleFunc("/ws/", controllers.SocketHandler)
+	http.HandleFunc("/validate/", controllers.JoinRoomValidationHandler)
 	http.Handle("/test/", http.StripPrefix("/test/",
 		http.FileServer(http.Dir("../client"))),
 	)
