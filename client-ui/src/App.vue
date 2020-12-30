@@ -1,57 +1,32 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld />
+    <v-main id="main">
+      <home />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import { Component, Vue } from "vue-property-decorator";
+import Home from "./views/Home.vue";
 
-export default Vue.extend({
-  name: "App",
-
+@Component({
   components: {
-    HelloWorld
-  },
-
-  data: () => ({
-    //
-  })
-});
+    Home
+  }
+})
+export default class App extends Vue {}
 </script>
+
+<style>
+#main {
+  background: rgb(12, 0, 38);
+  background: linear-gradient(
+    6deg,
+    rgba(12, 0, 38, 1) 10%,
+    rgba(12, 0, 50, 1) 48%,
+    rgba(11, 1, 64, 1) 63%,
+    rgba(0, 20, 92, 1) 93%
+  );
+}
+</style>
