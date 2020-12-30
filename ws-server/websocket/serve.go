@@ -12,14 +12,14 @@ var upgrader = utils.GetUpgrader()
 func ServeWs(w http.ResponseWriter, r *http.Request, roomId string) {
 	utils.LogSuccess("ROOM --> " + roomId)
 
-	socket, err := upgrader.Upgrade(w,r,nil)
+	socket, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		utils.LogError("Error occurred while connecting to room: "+roomId)
+		utils.LogError("Error occurred while connecting to room: " + roomId)
 		return
 	}
 
 	c := &t.Connection{
-		Ws: socket,
+		Ws:   socket,
 		Send: make(chan []byte, 256),
 	}
 	s := t.Subscription{
@@ -27,7 +27,6 @@ func ServeWs(w http.ResponseWriter, r *http.Request, roomId string) {
 		Room: roomId,
 	}
 
-	
 	H.Register <- s
 
 	_s := subscription(s)

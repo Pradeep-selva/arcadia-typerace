@@ -6,10 +6,10 @@ import (
 
 type hub t.Hub
 
-var H = hub {
-	Rooms: make(map[string]map[*t.Connection]bool),
-	Broadcast: make(chan t.Message),
-	Register: make(chan t.Subscription),
+var H = hub{
+	Rooms:      make(map[string]map[*t.Connection]bool),
+	Broadcast:  make(chan t.Message),
+	Register:   make(chan t.Subscription),
 	UnRegister: make(chan t.Subscription),
 }
 
@@ -35,7 +35,7 @@ func (H *hub) Run() {
 					}
 				}
 			}
-			
+
 		case m := <-H.Broadcast:
 			connections := H.Rooms[m.Room]
 			for c := range connections {

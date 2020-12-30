@@ -15,7 +15,7 @@
   <script>
     var ws = new WebSocket("ws://localhost:5500/ws/race/123");
 
-    if (ws.readyState === 3) {
+    if (ws.readyState !== 3) {
       var content = document.querySelector("#content");
       var text = "";
 

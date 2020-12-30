@@ -24,5 +24,10 @@ type Hub struct {
 	UnRegister chan Subscription
 }
 
+type ValidationResponse struct {
+	data string
+	ok bool
+}
+
 
 

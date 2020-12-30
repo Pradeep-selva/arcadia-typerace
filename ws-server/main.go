@@ -3,36 +3,23 @@ package main
 import (
 	"log"
 	"net/http"
-	"strconv"
-	"strings"
 
+	"github.com/pradeep-selva/arcadia-typerace/ws-server/controllers"
 	utils "github.com/pradeep-selva/arcadia-typerace/ws-server/utils"
 	ws "github.com/pradeep-selva/arcadia-typerace/ws-server/websocket"
 )
 
-func socketHandler(w http.ResponseWriter, r *http.Request) {
-	roomId := strings.Split(r.URL.Path, "/")[2]
-	userCount := len(ws.H.Rooms[roomId])
-
-	utils.LogSuccess(
-		"Number of users in room "+
-		roomId+": "+
-		strconv.Itoa(userCount),
-	)
-
-	if(userCount <= 1) {
-		ws.ServeWs(w,r,roomId)
-	}
-}
-
-func main(){
+func main() {
 	go ws.H.Run()
 
 	var PORT string = ":5500"
 
-	http.Handle("/", http.FileServer(http.Dir("../client")))
-	http.HandleFunc("/ws/", socketHandler)
+	http.HandleFunc("/", controllers.HomeHandler)
+	http.HandleFunc("/ws/", controllers.SocketHandler)
+	http.Handle("/test/", http.StripPrefix("/test/",
+		http.FileServer(http.Dir("../client"))),
+	)
 
-	utils.LogSuccess("Listening on port"+PORT)
+	utils.LogSuccess("Listening on port" + PORT)
 	log.Fatal(http.ListenAndServe(PORT, nil))
 }
