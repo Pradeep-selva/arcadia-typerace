@@ -18,7 +18,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SocketHandler(w http.ResponseWriter, r *http.Request) {
-	roomId := strings.Split(r.URL.Path, "/")[2]
+	roomId := strings.Split(r.URL.Path, "/")[3]
 	userCount := len(ws.H.Rooms[roomId])
 
 	utils.LogSuccess(
@@ -33,8 +33,8 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func JoinRoomValidationHandler(w http.ResponseWriter, r *http.Request) {
-	valType := strings.Split(r.URL.Path, "/")[2]
-	roomId := strings.Split(r.URL.Path, "/")[3]
+	valType := strings.Split(r.URL.Path, "/")[3]
+	roomId := strings.Split(r.URL.Path, "/")[4]
 	userCount := len(ws.H.Rooms[roomId])
 
 	w.Header().Set("Content-Type", "application/json")
