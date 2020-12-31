@@ -7,7 +7,7 @@ export const VAL_TYPES = {
   create: "create"
 };
 
-export const API_PATHS = {
+export const API_ENDPOINTS = {
   validate: (valType: keyof typeof VAL_TYPES, roomId: string) =>
     `/validate/${valType}/${roomId}`,
   socket: (roomId: string) => `/ws/${roomId}`

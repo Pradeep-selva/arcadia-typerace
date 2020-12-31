@@ -1,7 +1,11 @@
-import { VAL_TYPES } from "./api";
-
 export const ROUTES = {
   home: "/",
   validate: "/validate",
-  room: (roomId: string = ":id") => `/rooms/${roomId}`
+  room: (roomId = ":id") => `/rooms/${roomId}`
+};
+
+export const ROUTE_NAMES = {
+  home: "Home",
+  validate: "Validate",
+  room: "Room"
 };

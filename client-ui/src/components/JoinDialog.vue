@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { ROUTES, VAL_TYPES } from "../configs";
+import { ROUTE_NAMES, VAL_TYPES } from "../configs";
 
 @Component
 export default class JoinDialog extends Vue {
@@ -57,9 +57,9 @@ export default class JoinDialog extends Vue {
   error = "";
 
   onConfirm() {
-    if (this.roomCode.length <= 4 && !!this.roomCode)
+    if (this.roomCode.length === 6 && !!this.roomCode)
       this.$router.push({
-        path: ROUTES.validate,
+        name: ROUTE_NAMES.validate,
         params: {
           valType: VAL_TYPES.join,
           roomId: this.roomCode

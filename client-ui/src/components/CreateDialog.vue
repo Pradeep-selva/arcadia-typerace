@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { API_PATHS, VAL_TYPES } from "@/configs";
+import { ROUTE_NAMES, VAL_TYPES } from "@/configs";
 import { generateUID } from "@/services";
 import { Vue, Component } from "vue-property-decorator";
 
@@ -42,7 +42,7 @@ export default class CreateDialog extends Vue {
 
   onConfirm() {
     this.$router.push({
-      path: API_PATHS.validate,
+      name: ROUTE_NAMES.validate,
       params: {
         valType: VAL_TYPES.create,
         roomId: generateUID()
