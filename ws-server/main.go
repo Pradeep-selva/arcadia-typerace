@@ -14,9 +14,9 @@ func main() {
 
 	var PORT string = ":5500"
 
-	http.HandleFunc("/", controllers.HomeHandler)
-	http.HandleFunc("/ws/", controllers.SocketHandler)
-	http.HandleFunc("/validate/", controllers.JoinRoomValidationHandler)
+	http.HandleFunc(utils.GetApiPath("/"), controllers.HomeHandler)
+	http.HandleFunc(utils.GetApiPath("/ws/"), controllers.SocketHandler)
+	http.HandleFunc(utils.GetApiPath("/validate/"), controllers.JoinRoomValidationHandler)
 	http.Handle("/test/", http.StripPrefix("/test/",
 		http.FileServer(http.Dir("../client"))),
 	)

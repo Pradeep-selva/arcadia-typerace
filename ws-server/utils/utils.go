@@ -28,3 +28,7 @@ func GetUpgrader() websocket.Upgrader {
 		},
 	}
 }
+
+func GetApiPath(path string) string {
+	return "/api"+path
+}
