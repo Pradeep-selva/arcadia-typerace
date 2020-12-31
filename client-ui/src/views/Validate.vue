@@ -11,11 +11,22 @@
       color="primary"
       indeterminate
       class="mb-16"
+      v-if="loading"
     />
     <h1 v-if="loading" class="grey--text text--lighten-2">
       Validating your request...
     </h1>
     <h1 v-if="!!error" class="grey--text text--lighten-2">{{ error }}</h1>
+    <v-btn
+      v-if="!!error"
+      color="grey lighten-1"
+      outlined
+      x-large
+      class="mt-16"
+      @click="onNavigateHome"
+    >
+      Go Home
+    </v-btn>
   </v-container>
 </template>
 
@@ -50,6 +61,10 @@ export default class Validate extends Vue {
     } finally {
       this.loading = false;
     }
+  }
+
+  onNavigateHome() {
+    this.$router.push({ path: ROUTES.home });
   }
 }
 </script>
