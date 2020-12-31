@@ -10,8 +10,21 @@ import (
 	t "github.com/pradeep-selva/arcadia-typerace/ws-server/pkg/types"
 )
 
+func CORSMiddleware(next http.HandlerFunc) http.Handler {
+    return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, x-api-key, Authorization, accept, origin, Cache-Control, X-Requested-With")
+			w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+			next.ServeHTTP(w,r)
+    },
+	)
+}
+
 func Middleware(next http.HandlerFunc) http.Handler {
-	return http.HandlerFunc(
+	return CORSMiddleware(http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 
@@ -35,7 +48,7 @@ func Middleware(next http.HandlerFunc) http.Handler {
 				})
 			}
 	},
-)
+))
 }
 
 func GetUpgrader() websocket.Upgrader {
