@@ -13,7 +13,7 @@ import { CopyrightFooter } from "./components";
 
 @Component({
   components: {
-    CopyrightFooter: CopyrightFooter
+    CopyrightFooter
   }
 })
 export default class App extends Vue {}
