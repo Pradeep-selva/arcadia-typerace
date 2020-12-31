@@ -15,6 +15,6 @@ func GetIfRequiredUsersPresent(valType string, users int) error {
 	} else if valType == validationTypes.CREATE && users == 0 {
 		return nil
 	} else {
-		return fmt.Errorf("Invalid operation blocked.")
+		return fmt.Errorf("Unable to "+valType+" room.")
 	}
 }
