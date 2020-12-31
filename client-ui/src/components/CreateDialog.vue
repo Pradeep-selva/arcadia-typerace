@@ -23,7 +23,7 @@
         <v-btn color="blue darken-1" text @click="dialog = false">
           Close
         </v-btn>
-        <v-btn color="blue darken-1" text @click="dialog = false">
+        <v-btn color="blue darken-1" text @click="onConfirm">
           Confirm
         </v-btn>
       </v-card-actions>
@@ -32,9 +32,22 @@
 </template>
 
 <script>
-export default {
-  data: () => ({
-    dialog: false
-  })
-};
+import { API_PATHS, VAL_TYPES } from "@/configs";
+import { generateUID } from "@/services";
+import { Vue, Component } from "vue-property-decorator";
+
+@Component
+export default class CreateDialog extends Vue {
+  dialog = false;
+
+  onConfirm() {
+    this.$router.push({
+      path: API_PATHS.validate,
+      params: {
+        valType: VAL_TYPES.create,
+        roomId: generateUID()
+      }
+    });
+  }
+}
 </script>

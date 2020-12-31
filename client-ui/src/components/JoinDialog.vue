@@ -48,6 +48,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { ROUTES, VAL_TYPES } from "../configs";
 
 @Component
 export default class JoinDialog extends Vue {
@@ -57,7 +58,13 @@ export default class JoinDialog extends Vue {
 
   onConfirm() {
     if (this.roomCode.length <= 4 && !!this.roomCode)
-      this.$router.push({ path: `/room/${this.roomCode}` });
+      this.$router.push({
+        path: ROUTES.validate,
+        params: {
+          valType: VAL_TYPES.join,
+          roomId: this.roomCode
+        }
+      });
     else this.error = "Enter a valid room code";
   }
 }

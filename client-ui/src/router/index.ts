@@ -1,19 +1,25 @@
+import { ROUTES } from "@/configs";
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/Home.vue";
+import { Home } from "../views";
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
-    path: "/",
+    path: ROUTES.home,
     name: "Home",
     component: Home
   },
   {
-    path: "/room/:id",
+    path: ROUTES.room(),
     name: "Room",
     component: () => import("../views/Room.vue")
+  },
+  {
+    path: ROUTES.validate,
+    name: "Validate",
+    component: () => import("../views/Validate.vue")
   }
 ];
 
