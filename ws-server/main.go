@@ -21,7 +21,7 @@ func main() {
 		utils.Middleware(controllers.SocketHandler))
 	//validation
 	http.Handle(utils.GetApiPath("/validate/"), 
-		utils.Middleware(controllers.JoinRoomValidationHandler))
+		utils.Middleware(controllers.RoomValidationHandler))
 	//test
 	http.Handle("/test/", http.StripPrefix("/test/",
 		http.FileServer(http.Dir("../client"))),

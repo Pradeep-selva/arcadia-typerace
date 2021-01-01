@@ -28,12 +28,12 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 		strconv.Itoa(userCount),
 	)
 
-	if(userCount <= 1) {
+	if userCount <= 1 {
 		ws.ServeWs(w,r,roomId, userName)
 	}
 }
 
-func JoinRoomValidationHandler(w http.ResponseWriter, r *http.Request) {
+func RoomValidationHandler(w http.ResponseWriter, r *http.Request) {
 	valType := strings.Split(r.URL.Path, "/")[3]
 	roomId := strings.Split(r.URL.Path, "/")[4]
 	userCount := len(ws.H.Rooms[roomId])

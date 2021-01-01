@@ -1,9 +1,10 @@
 package ws
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 
-	"github.com/gorilla/websocket"
 	t "github.com/pradeep-selva/arcadia-typerace/ws-server/pkg/types"
 	"github.com/pradeep-selva/arcadia-typerace/ws-server/utils"
 )
@@ -18,8 +19,8 @@ func ServeWs(w http.ResponseWriter, r *http.Request, roomId string, userName str
 		utils.LogError("Error occurred while connecting to room: " + roomId)
 		return
 	}
+	userCount := len(H.Rooms[roomId])
 
-	socket.WriteMessage(websocket.TextMessage, []byte(userName+"joined"))
 
 	c := &t.Connection{
 		Ws:   socket,
@@ -32,6 +33,21 @@ func ServeWs(w http.ResponseWriter, r *http.Request, roomId string, userName str
 	}
 
 	H.Register <- s
+
+	if userCount == 1 {
+		message := t.JoinMessage{
+			UserName: userName,
+		}
+		message.Fill()
+		msgBytes := new(bytes.Buffer)
+		json.NewEncoder(msgBytes).Encode(message)
+
+		m := t.Message{
+			Data: msgBytes.Bytes(),
+			Room: s.Room,
+		}
+		H.Broadcast <- m
+	}
 
 	_s := subscription(s)
 	utils.LogSuccess(_s.Room)
