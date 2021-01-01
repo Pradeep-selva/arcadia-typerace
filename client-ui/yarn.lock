@@ -1036,6 +1036,11 @@
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.5.tgz#434711bdd49eb5ee69d90c1d67c354a9a8ecb18b"
   integrity sha512-/JHkVHtx/REVG0VVToGRGH2+23hsYLHdyG+GrvoUGlGAd0ErauXDyvHtRI/7H7mzLm+tBCKA7pfcpkQ1lf58iQ==
 
+"@types/random-words@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/random-words/-/random-words-1.1.0.tgz#7f4245faf2092caa6511f6fadda303162a3e3772"
+  integrity sha512-YZqkHIAGoXv6mlyEOwluhMjF9aotH2m9HrCCR+PNtES/ED00u5u4W7X1lWxc5AaFRKdKx+5orWTFW7iyGrZpOQ==
+
 "@types/range-parser@*":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"

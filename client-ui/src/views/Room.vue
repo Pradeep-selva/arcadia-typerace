@@ -13,8 +13,8 @@
     d-flex 
     justify-center"
     >
-      ROOM--
-      <span class="grey--text text--lighten-2">{{ $route.params.id }}</span>
+      <span class="mr-3">ROOM</span>
+      <span class="grey--text text--lighten-2">{{ roomId }}</span>
     </h1>
     <div
       class="d-flex 
@@ -27,19 +27,46 @@
     </div>
     <v-divider light class="mb-10" id="divider" />
     <v-row justify="space-around" class="d-flex flex-row">
-      <v-col class="editor" sm="5"></v-col>
-      <v-col class="editor" sm="5"></v-col>
+      <v-col class="editor" sm="5">
+        <div class="grey--text text--lighten-2 display-2">
+          <span class="green--text">
+            {{ completeString }}
+          </span>
+          <span>
+            {{ incompleteString }}
+          </span>
+        </div>
+      </v-col>
+      <v-col class="editor" sm="5">
+        <div class="grey--text text--lighten-2 display-2">
+          <span class="green--text">
+            {{ completeString }}
+          </span>
+          <span>
+            {{ incompleteString }}
+          </span>
+        </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import RandomWords from "random-words";
+import { API_ENDPOINTS } from "@/configs";
 
 @Component
 export default class Room extends Vue {
+  roomId = this.$route.params.id;
+  incompleteString = (RandomWords(30) as string[]).join(" ");
+  completeString = "";
+  enteredText = "";
+
   mounted() {
-    console.log(this.$route);
+    document.addEventListener("keypress", (event) => {
+      this.enteredText += event.key;
+    });
   }
 }
 </script>
@@ -48,7 +75,8 @@ export default class Room extends Vue {
 .editor {
   background-color: #090212;
   border-radius: 10px;
-  max-height: 50vh;
+  min-height: 50vh;
+  padding: 2rem;
 }
 
 .start-btn {
