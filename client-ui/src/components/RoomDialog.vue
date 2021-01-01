@@ -27,8 +27,8 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                label="Room Code*"
-                hint="Enter a room code to join"
+                label="Your name*"
+                hint="What's your name?"
                 v-model="userName"
                 :error="!!error"
                 :error-messages="error"
@@ -46,7 +46,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-alert :value="alert" dense elevation="15" type="success">
+    <v-alert :value="alert" dense elevation="15" type="success" class="mt-16">
       Copied room Code
     </v-alert>
   </v-dialog>

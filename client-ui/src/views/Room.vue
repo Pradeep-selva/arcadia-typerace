@@ -7,7 +7,7 @@
    mt-16"
     fluid
   >
-    <room-dialog :roomCode="roomId" />
+    <room-dialog :roomCode="roomId" :setUserName="onJoin" />
     <h1
       class="grey--text 
     text--lighten-1 
@@ -71,8 +71,8 @@ export default class Room extends Vue {
   completeString = "";
   enteredTextCount = 0;
 
-  mounted() {
-    const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId));
+  onJoin(userName: string) {
+    const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId, userName));
 
     document.addEventListener("keypress", (event) => {
       if (event.keyCode == 32) event.preventDefault();
@@ -86,6 +86,7 @@ export default class Room extends Vue {
     });
 
     ws.addEventListener("message", (event) => {
+      console.log(event);
       const count = event.data.length;
 
       this.incompleteString = this.randomWords.slice(
