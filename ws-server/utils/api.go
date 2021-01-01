@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	"github.com/joho/godotenv"
@@ -29,6 +30,7 @@ func Middleware(next http.HandlerFunc) http.Handler {
 			w.Header().Set("Content-Type", "application/json")
 
 			err := godotenv.Load(".env")
+			x_api_key := os.Getenv("X_API_KEY")
 			if err != nil {
 				LogError("An error occured while initializing .env")
 				json.NewEncoder(w).Encode(t.ValidationResponse{
@@ -38,7 +40,13 @@ func Middleware(next http.HandlerFunc) http.Handler {
 				return
 			}
 
-			if os.Getenv("X_API_KEY") == r.Header.Get("x-api-key") {
+			header_x_api_key := r.Header.Get("x-api-key")
+			path_x_api_key := strings.Split(r.URL.Path, "/")[3]
+
+			isValid := x_api_key == header_x_api_key || 
+					"x-api-key@"+x_api_key == path_x_api_key
+
+			if isValid {
 				next.ServeHTTP(w,r)
 			} else {
 				LogError("Unauthorized user attempted to access")

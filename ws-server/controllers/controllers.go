@@ -18,7 +18,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SocketHandler(w http.ResponseWriter, r *http.Request) {
-	roomId := strings.Split(r.URL.Path, "/")[3]
+	roomId := strings.Split(r.URL.Path, "/")[4]
 	userCount := len(ws.H.Rooms[roomId])
 
 	utils.LogSuccess(
