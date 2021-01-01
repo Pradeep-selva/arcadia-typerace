@@ -49,13 +49,16 @@
         </div>
       </v-col>
     </v-row>
+    <v-alert :value="showAlert" dense elevation="15" type="success" id="alert">
+      {{ newJoinedUser }} joined room
+    </v-alert>
   </v-container>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import RandomWords from "random-words";
-import { API_ENDPOINTS } from "@/configs";
+import { API_ENDPOINTS, Events, EventResponse } from "@/configs";
 import { RoomDialog } from "../components";
 
 @Component({
@@ -68,6 +71,8 @@ export default class Room extends Vue {
   randomWords = (RandomWords(30) as string[]).join(" ");
   incompleteString = this.randomWords;
   incompleteTextColor = "white";
+  newJoinedUser = "";
+  showAlert = false;
   completeString = "";
   enteredTextCount = 0;
 
@@ -78,22 +83,44 @@ export default class Room extends Vue {
       if (event.keyCode == 32) event.preventDefault();
 
       if (event.key === this.incompleteString[0])
-        ws.send(this.randomWords.slice(0, ++this.enteredTextCount));
+        ws.send(
+          JSON.stringify({
+            event: Events.TYPING,
+            data: this.randomWords.slice(0, ++this.enteredTextCount),
+            userName: userName
+          } as EventResponse)
+        );
       else {
         this.incompleteTextColor = "red";
         setTimeout(() => (this.incompleteTextColor = "white"), 100);
       }
     });
 
-    ws.addEventListener("message", (event) => {
-      console.log(event);
-      const count = event.data.length;
+    ws.addEventListener("message", (e) => {
+      console.log(e);
+      const event: EventResponse = JSON.parse(e.data);
 
-      this.incompleteString = this.randomWords.slice(
-        count,
-        this.randomWords.length
-      );
-      this.completeString = this.randomWords.slice(0, count);
+      switch (event.event) {
+        case Events.JOIN:
+          this.newJoinedUser = event?.userName;
+          this.showAlert = true;
+          setTimeout(() => (this.showAlert = false), 2000);
+          break;
+
+        case Events.TYPING: {
+          const count = event?.data.length;
+
+          this.incompleteString = this.randomWords.slice(
+            count,
+            this.randomWords.length
+          );
+          this.completeString = this.randomWords.slice(0, count);
+          break;
+        }
+
+        default:
+          console.log("Error encountered");
+      }
     });
   }
 }
@@ -113,5 +140,11 @@ export default class Room extends Vue {
 
 #divider {
   border-color: #8e8c91;
+}
+
+#alert {
+  position: fixed;
+  bottom: 50px;
+  left: 100px;
 }
 </style>
