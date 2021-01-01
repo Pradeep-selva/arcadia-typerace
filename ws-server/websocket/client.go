@@ -37,6 +37,7 @@ func (s subscription) readPump() {
 		_, msg, err := c.Ws.ReadMessage()
 		if err != nil {
 			utils.LogError(err.Error())
+			break
 		}
 
 		m := t.Message{

@@ -3,13 +3,14 @@ package ws
 import (
 	"net/http"
 
+	"github.com/gorilla/websocket"
 	t "github.com/pradeep-selva/arcadia-typerace/ws-server/pkg/types"
 	"github.com/pradeep-selva/arcadia-typerace/ws-server/utils"
 )
 
 var upgrader = utils.GetUpgrader()
 
-func ServeWs(w http.ResponseWriter, r *http.Request, roomId string) {
+func ServeWs(w http.ResponseWriter, r *http.Request, roomId string, userName string) {
 	utils.LogSuccess("ROOM --> " + roomId)
 
 	socket, err := upgrader.Upgrade(w, r, nil)
@@ -18,6 +19,8 @@ func ServeWs(w http.ResponseWriter, r *http.Request, roomId string) {
 		return
 	}
 
+	socket.WriteMessage(websocket.TextMessage, []byte(userName+"joined"))
+
 	c := &t.Connection{
 		Ws:   socket,
 		Send: make(chan []byte, 256),
@@ -25,6 +28,7 @@ func ServeWs(w http.ResponseWriter, r *http.Request, roomId string) {
 	s := t.Subscription{
 		Conn: c,
 		Room: roomId,
+		UserName: userName,
 	}
 
 	H.Register <- s

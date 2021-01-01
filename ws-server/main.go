@@ -28,5 +28,5 @@ func main() {
 	)
 
 	utils.LogSuccess("Listening on port" + PORT)
-	log.Fatal(http.ListenAndServe(PORT, nil))
+	log.Println(http.ListenAndServe(PORT, nil))
 }

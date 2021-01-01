@@ -19,6 +19,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 func SocketHandler(w http.ResponseWriter, r *http.Request) {
 	roomId := strings.Split(r.URL.Path, "/")[4]
+	userName := strings.Split(r.URL.Path, "/")[5]
 	userCount := len(ws.H.Rooms[roomId])
 
 	utils.LogSuccess(
@@ -28,7 +29,7 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if(userCount <= 1) {
-		ws.ServeWs(w,r,roomId)
+		ws.ServeWs(w,r,roomId, userName)
 	}
 }
 
@@ -40,7 +41,7 @@ func JoinRoomValidationHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	err := configs.GetIfRequiredUsersPresent(valType, userCount)
-	if err != nil  {
+	if err != nil {
 		utils.LogError("Invalid operation blocked.")
 		json.NewEncoder(w).Encode(t.ValidationResponse{
 			Data: err.Error(), 
