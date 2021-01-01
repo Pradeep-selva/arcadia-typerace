@@ -7,6 +7,7 @@
    mt-16"
     fluid
   >
+    <room-dialog :roomCode="roomId" />
     <h1
       class="grey--text 
     text--lighten-1 
@@ -55,8 +56,13 @@
 import { Vue, Component } from "vue-property-decorator";
 import RandomWords from "random-words";
 import { API_ENDPOINTS } from "@/configs";
+import { RoomDialog } from "../components";
 
-@Component
+@Component({
+  components: {
+    RoomDialog
+  }
+})
 export default class Room extends Vue {
   roomId = this.$route.params.id;
   randomWords = (RandomWords(30) as string[]).join(" ");
