@@ -59,13 +59,26 @@ import { API_ENDPOINTS } from "@/configs";
 @Component
 export default class Room extends Vue {
   roomId = this.$route.params.id;
-  incompleteString = (RandomWords(30) as string[]).join(" ");
+  randomWords = (RandomWords(30) as string[]).join(" ");
+  incompleteString = this.randomWords;
   completeString = "";
-  enteredText = "";
+  enteredTextCount = 0;
 
   mounted() {
+    const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId));
+
     document.addEventListener("keypress", (event) => {
-      this.enteredText += event.key;
+      ws.send(this.randomWords.slice(0, ++this.enteredTextCount));
+    });
+
+    ws.addEventListener("message", (event) => {
+      const count = event.data.length;
+
+      this.incompleteString = this.randomWords.slice(
+        count,
+        this.randomWords.length
+      );
+      this.completeString = this.randomWords.slice(0, count);
     });
   }
 }
