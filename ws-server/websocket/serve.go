@@ -1,8 +1,6 @@
 package ws
 
 import (
-	"bytes"
-	"encoding/json"
 	"net/http"
 
 	t "github.com/pradeep-selva/arcadia-typerace/ws-server/pkg/types"
@@ -38,12 +36,9 @@ func ServeWs(w http.ResponseWriter, r *http.Request, roomId string, userName str
 		message := t.JoinMessage{
 			UserName: userName,
 		}
-		message.Fill()
-		msgBytes := new(bytes.Buffer)
-		json.NewEncoder(msgBytes).Encode(message)
 
 		m := t.Message{
-			Data: msgBytes.Bytes(),
+			Data: message.ConvertToBytes(),
 			Room: s.Room,
 		}
 		H.Broadcast <- m
