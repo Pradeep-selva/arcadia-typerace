@@ -32,7 +32,7 @@
           <span class="green--text">
             {{ completeString }}
           </span>
-          <span>
+          <span :class="`${incompleteTextColor}--text`">
             {{ incompleteString }}
           </span>
         </div>
@@ -61,6 +61,7 @@ export default class Room extends Vue {
   roomId = this.$route.params.id;
   randomWords = (RandomWords(30) as string[]).join(" ");
   incompleteString = this.randomWords;
+  incompleteTextColor = "white";
   completeString = "";
   enteredTextCount = 0;
 
@@ -68,7 +69,14 @@ export default class Room extends Vue {
     const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId));
 
     document.addEventListener("keypress", (event) => {
-      ws.send(this.randomWords.slice(0, ++this.enteredTextCount));
+      if (event.keyCode == 32) event.preventDefault();
+
+      if (event.key === this.incompleteString[0])
+        ws.send(this.randomWords.slice(0, ++this.enteredTextCount));
+      else {
+        this.incompleteTextColor = "red";
+        setTimeout(() => (this.incompleteTextColor = "white"), 100);
+      }
     });
 
     ws.addEventListener("message", (event) => {
