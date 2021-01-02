@@ -209,20 +209,23 @@ export default class Room extends Vue {
       if (
         event.key ===
         (this as ThisType)[`${isFirst ? "first" : "second"}IncompleteString`][0]
-      )
+      ) {
+        const data = this.randomWords.slice(
+          0,
+          ++(this as ThisType)[
+            `${isFirst ? "first" : "second"}EnteredTextCount`
+          ]
+        );
+        console.log(data);
+        if (data === this.randomWords) this.onWon();
         this.ws?.send(
           JSON.stringify({
             event: Events.TYPING,
-            data: this.randomWords.slice(
-              0,
-              ++(this as ThisType)[
-                `${isFirst ? "first" : "second"}EnteredTextCount`
-              ]
-            ),
+            data,
             userName: this.curUser
           } as EventResponse)
         );
-      else {
+      } else {
         this.incompleteTextColor = "red";
         setTimeout(() => (this.incompleteTextColor = "white"), 100);
       }
@@ -247,6 +250,15 @@ export default class Room extends Vue {
         this.initKeyPressListener();
       }
     }, 1000);
+  }
+
+  onWon() {
+    this.ws?.send(
+      JSON.stringify({
+        event: Events.WON,
+        userName: this.curUser
+      } as EventResponse)
+    );
   }
 }
 </script>
