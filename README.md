@@ -27,7 +27,7 @@
 ## Steps to run locally
 
 - Clone the repo and install dependencies with `npm install` (or) `yarn` in `client_ui`, and `go mod vendor` in `ws-server`.
-- Create a file named `secrets.ts` in src directory and export a constant named `SECRETS` containing your x-api-key, which must be added to `ws-server` too.
+- Create a file named `secrets.ts` in src directory of `client-ui` and export a constant named `SECRETS` containing your x-api-key, which must be added to `ws-server` too.
 - In root directory run `cd client-ui && yarn serve` and `cd ws-server && go run main.go`.
 - go to `localhost:8080`
 
