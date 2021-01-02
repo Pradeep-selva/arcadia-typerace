@@ -18,6 +18,12 @@
       <span class="text--lighten-2">{{ roomId }}</span>
     </h1>
     <div
+      class="text-center display-1 green--text mb-5 mt-5"
+      v-if="!!firstUser && !secondUser"
+    >
+      Waiting for someone to join...
+    </div>
+    <div
       class="d-flex 
     justify-center 
     mb-5 mt-5"
