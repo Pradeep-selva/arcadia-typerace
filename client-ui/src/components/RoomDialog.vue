@@ -53,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import { copyToClipBoard } from "@/services";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
@@ -73,14 +74,10 @@ export default class CreateDialog extends Vue {
   }
 
   async onCopy() {
-    try {
-      await navigator.clipboard.writeText(this.roomCode);
-
+    copyToClipBoard(this.roomCode, () => {
       this.alert = true;
       setTimeout(() => (this.alert = false), 2000);
-    } catch (error) {
-      console.log(error);
-    }
+    });
   }
 }
 </script>

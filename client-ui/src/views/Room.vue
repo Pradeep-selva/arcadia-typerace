@@ -14,8 +14,44 @@
     d-flex 
     justify-center"
     >
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="ma-2 mr-5"
+            text
+            icon
+            color="blue darken-3"
+            @click="onCopy"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon color="blue lighten-3">
+              mdi-clipboard-multiple
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>Copy room code</span>
+      </v-tooltip>
       <span class="mr-3">ROOM</span>
-      <span class="text--lighten-2">{{ roomId }}</span>
+      <span class="text--lighten-2 mr-3">{{ roomId }}</span>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="ma-2"
+            text
+            icon
+            color="blue darken-3"
+            @click="_goHome"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon color="green lighten-2">
+              mdi-home-export-outline
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>Go home</span>
+      </v-tooltip>
     </h1>
     <div
       class="text-center display-1 green--text mb-5 mt-5"
@@ -106,6 +142,9 @@
     <v-alert :value="showAlert" dense elevation="15" type="success" id="alert">
       {{ newJoinedUser }} joined room
     </v-alert>
+    <v-alert :value="copyAlert" dense elevation="15" type="success" id="alert">
+      copied room code.
+    </v-alert>
     <won-dialog
       :dialog="!!firstWPM && !!secondWPM"
       :first="firstUser"
@@ -122,6 +161,7 @@ import { Vue, Component } from "vue-property-decorator";
 import RandomWords from "random-words";
 import { API_ENDPOINTS, Events, EventResponse } from "@/configs";
 import { RoomDialog, WonDialog, ErrorDialog } from "../components";
+import { copyToClipBoard, goHome } from "@/services";
 
 @Component({
   components: {
@@ -132,6 +172,7 @@ import { RoomDialog, WonDialog, ErrorDialog } from "../components";
 })
 export default class Room extends Vue {
   ws: WebSocket | null = null;
+  _goHome = goHome;
   error = false;
   curUser = "";
   roomId = this.$route.params.id;
@@ -143,6 +184,7 @@ export default class Room extends Vue {
   incompleteTextColor = "white";
   newJoinedUser = "";
   showAlert = false;
+  copyAlert = false;
   firstCompleteString = "";
   secondCompleteString = "";
   counter: number | null = null;
@@ -331,6 +373,13 @@ export default class Room extends Vue {
         window.clearInterval(track);
       }
     }, 1000);
+  }
+
+  async onCopy() {
+    copyToClipBoard(this.roomId, () => {
+      this.copyAlert = true;
+      setTimeout(() => (this.copyAlert = false), 2000);
+    });
   }
 }
 </script>

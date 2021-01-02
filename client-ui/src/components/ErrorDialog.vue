@@ -24,15 +24,12 @@
 </template>
 
 <script lang="ts">
-import { DEPLOYED_URL } from "@/configs";
+import { goHome } from "@/services";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class CreateDialog extends Vue {
   @Prop() dialog!: boolean;
-
-  onConfirm() {
-    window.location.replace(DEPLOYED_URL);
-  }
+  onConfirm = goHome;
 }
 </script>
