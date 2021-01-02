@@ -70,20 +70,28 @@
       <v-col class="editor" sm="5">
         <div class="grey--text text--lighten-2 display-2">
           <span class="green--text">
-            {{ completeString }}
+            {{ firstCompleteString }}
           </span>
-          <span :class="`${incompleteTextColor}--text`">
-            {{ incompleteString }}
+          <span
+            :class="
+              `${curUser === firstUser ? incompleteTextColor : 'white'}--text`
+            "
+          >
+            {{ firstIncompleteString }}
           </span>
         </div>
       </v-col>
       <v-col class="editor" sm="5">
         <div class="grey--text text--lighten-2 display-2">
           <span class="green--text">
-            {{ completeString }}
+            {{ secondCompleteString }}
           </span>
-          <span>
-            {{ incompleteString }}
+          <span
+            :class="
+              `${curUser === secondUser ? incompleteTextColor : 'white'}--text`
+            "
+          >
+            {{ secondIncompleteString }}
           </span>
         </div>
       </v-col>
@@ -112,13 +120,16 @@ export default class Room extends Vue {
   firstUser = "";
   secondUser = "";
   randomWords = (RandomWords(30) as string[]).join(" ");
-  incompleteString = this.randomWords;
+  firstIncompleteString = this.randomWords;
+  secondIncompleteString = this.randomWords;
   incompleteTextColor = "white";
   newJoinedUser = "";
   showAlert = false;
-  completeString = "";
+  firstCompleteString = "";
+  secondCompleteString = "";
   counter: number | null = null;
-  enteredTextCount = 0;
+  firstEnteredTextCount = 0;
+  secondEnteredTextCount = 0;
 
   onJoin(userName: string) {
     const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId, userName));
@@ -129,6 +140,7 @@ export default class Room extends Vue {
 
     ws.addEventListener("message", (e) => {
       console.log(e);
+      type ThisType = { [x: string]: any };
       const event: EventResponse = JSON.parse(e.data);
 
       switch (event.event) {
@@ -151,12 +163,19 @@ export default class Room extends Vue {
 
         case Events.TYPING: {
           const count = event?.data.length;
-
-          this.incompleteString = this.randomWords.slice(
+          const isFirst = event?.userName === this.firstUser;
+          const incomplete = this.randomWords.slice(
             count,
             this.randomWords.length
           );
-          this.completeString = this.randomWords.slice(0, count);
+          const complete = this.randomWords.slice(0, count);
+
+          (this as ThisType)[
+            `${isFirst ? "first" : "second"}IncompleteString`
+          ] = incomplete;
+          (this as ThisType)[
+            `${isFirst ? "first" : "second"}CompleteString`
+          ] = complete;
           break;
         }
 
@@ -165,7 +184,8 @@ export default class Room extends Vue {
             this.firstUser = event?.userName;
             this.secondUser = userName;
             this.randomWords = event?.data;
-            this.incompleteString = this.randomWords;
+            this.firstIncompleteString = this.randomWords;
+            this.secondIncompleteString = this.randomWords;
           }
           break;
 
@@ -180,14 +200,25 @@ export default class Room extends Vue {
   }
 
   initKeyPressListener() {
+    const isFirst = this.curUser === this.firstUser;
+    type ThisType = { [x: string]: any };
+
     document.addEventListener("keypress", (event) => {
       if (event.keyCode == 32) event.preventDefault();
 
-      if (event.key === this.incompleteString[0])
+      if (
+        event.key ===
+        (this as ThisType)[`${isFirst ? "first" : "second"}IncompleteString`][0]
+      )
         this.ws?.send(
           JSON.stringify({
             event: Events.TYPING,
-            data: this.randomWords.slice(0, ++this.enteredTextCount),
+            data: this.randomWords.slice(
+              0,
+              ++(this as ThisType)[
+                `${isFirst ? "first" : "second"}EnteredTextCount`
+              ]
+            ),
             userName: this.curUser
           } as EventResponse)
         );
