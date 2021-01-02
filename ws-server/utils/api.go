@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -18,6 +19,13 @@ func CORSMiddleware(next http.HandlerFunc) http.Handler {
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, x-api-key, Authorization, accept, origin, Cache-Control, X-Requested-With")
 			w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+			if r.Method == "OPTIONS" {
+				log.Println("OPTIONS")
+				w.WriteHeader(http.StatusNoContent)
+				w.Write([]byte("No content received"))
+				return
+			}
 
 			next.ServeHTTP(w,r)
     },

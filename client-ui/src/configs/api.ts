@@ -1,11 +1,13 @@
 import { SECRETS } from "@/secrets";
 import { PRODUCTION } from "./environment";
 
-const URL = "localhost:5500";
-export const BASE_URL = `http://${URL}`;
-const SOCKET_URL = `ws://${URL}`;
+const URL = PRODUCTION ? SECRETS.API_URL : "localhost:5500";
+export const BASE_URL = `${PRODUCTION ? "https" : "http"}://${URL}`;
+const SOCKET_URL = `${PRODUCTION ? "wss" : "ws"}://${URL}`;
 
-export const DEPLOYED_URL = PRODUCTION ? "" : "http://localhost:8080/";
+export const DEPLOYED_URL = PRODUCTION
+  ? "https://arcadia-typerace.web.app"
+  : "http://localhost:8080/";
 
 export const VAL_TYPES = {
   join: "join",

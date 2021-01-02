@@ -3,7 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/pradeep-selva/arcadia-typerace/ws-server/controllers"
 	utils "github.com/pradeep-selva/arcadia-typerace/ws-server/utils"
 	ws "github.com/pradeep-selva/arcadia-typerace/ws-server/websocket"
@@ -11,8 +13,6 @@ import (
 
 func main() {
 	go ws.H.Run()
-
-	var PORT string = ":5500"
 
 	//home
 	http.HandleFunc("/", controllers.HomeHandler)
@@ -27,6 +27,15 @@ func main() {
 		http.FileServer(http.Dir("../client"))),
 	)
 
-	utils.LogSuccess("Listening on port" + PORT)
-	log.Println(http.ListenAndServe(PORT, nil))
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalln("An error occurred while reading .env")
+	}
+
+	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		PORT = "5500"
+	}
+	utils.LogSuccess("Listening on port :" + PORT)
+	log.Println(http.ListenAndServe(":"+PORT, nil))
 }
