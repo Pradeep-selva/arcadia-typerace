@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts">
+import { DEPLOYED_URL } from "@/configs";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
@@ -43,7 +44,7 @@ export default class CreateDialog extends Vue {
   @Prop() secondWPM!: string;
 
   onConfirm() {
-    window.location.replace("abc");
+    window.location.replace(DEPLOYED_URL);
   }
 }
 </script>

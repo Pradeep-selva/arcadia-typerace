@@ -1,10 +1,11 @@
 import { SECRETS } from "@/secrets";
+import { PRODUCTION } from "./environment";
 
 const URL = "localhost:5500";
 export const BASE_URL = `http://${URL}`;
 const SOCKET_URL = `ws://${URL}`;
 
-export const DEPLOYED_URL = window.location.origin;
+export const DEPLOYED_URL = PRODUCTION ? "" : "http://localhost:8080/";
 
 export const VAL_TYPES = {
   join: "join",
