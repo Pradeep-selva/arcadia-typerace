@@ -161,7 +161,6 @@ export default class Room extends Vue {
     this.firstUser = userName;
 
     ws.addEventListener("message", (e) => {
-      console.log(e);
       type ThisType = { [x: string]: any };
       const event: EventResponse = JSON.parse(e.data);
 
@@ -198,20 +197,22 @@ export default class Room extends Vue {
           break;
 
         case Events.TYPING: {
-          const count = event?.data.length;
-          const isFirst = event?.userName === this.firstUser;
-          const incomplete = this.randomWords.slice(
-            count,
-            this.randomWords.length
-          );
-          const complete = this.randomWords.slice(0, count);
+          if (event.userName !== this.curUser) {
+            const count = event?.data.length;
+            const isFirst = event?.userName === this.firstUser;
+            const incomplete = this.randomWords.slice(
+              count,
+              this.randomWords.length
+            );
+            const complete = this.randomWords.slice(0, count);
 
-          (this as ThisType)[
-            `${isFirst ? "first" : "second"}IncompleteString`
-          ] = incomplete;
-          (this as ThisType)[
-            `${isFirst ? "first" : "second"}CompleteString`
-          ] = complete;
+            (this as ThisType)[
+              `${isFirst ? "first" : "second"}IncompleteString`
+            ] = incomplete;
+            (this as ThisType)[
+              `${isFirst ? "first" : "second"}CompleteString`
+            ] = complete;
+          }
           break;
         }
 
@@ -258,7 +259,13 @@ export default class Room extends Vue {
             `${isFirst ? "first" : "second"}EnteredTextCount`
           ]
         );
-        console.log(data);
+        (this as ThisType)[
+          `${isFirst ? "first" : "second"}CompleteString`
+        ] = data;
+        (this as ThisType)[
+          `${isFirst ? "first" : "second"}IncompleteString`
+        ] = this.randomWords.slice(data.length, this.randomWords.length);
+
         this.ws?.send(
           JSON.stringify({
             event: Events.TYPING,
