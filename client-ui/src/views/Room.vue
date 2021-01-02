@@ -114,6 +114,9 @@
           <span class="green--text">
             {{ firstCompleteString }}
           </span>
+          <span class="yellow--text text--lighten-3">
+            |
+          </span>
           <span
             :class="
               `${curUser === firstUser ? incompleteTextColor : 'white'}--text`
@@ -127,6 +130,9 @@
         <div class="grey--text text--lighten-2 display-2">
           <span class="green--text">
             {{ secondCompleteString }}
+          </span>
+          <span class="yellow--text text--lighten-3">
+            |
           </span>
           <span
             :class="
