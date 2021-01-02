@@ -130,6 +130,9 @@ export default class Room extends Vue {
   counter: number | null = null;
   firstEnteredTextCount = 0;
   secondEnteredTextCount = 0;
+  time = 0;
+  firstWPM = 0;
+  secondWPM = 0;
 
   onJoin(userName: string) {
     const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId, userName));
@@ -161,6 +164,20 @@ export default class Room extends Vue {
           setTimeout(() => (this.showAlert = false), 2000);
           break;
 
+        case Events.INITIATE_START:
+          this.onStartRace();
+          break;
+
+        case Events.RECEIVED_TEST:
+          if (event?.userName !== userName) {
+            this.firstUser = event?.userName;
+            this.secondUser = userName;
+            this.randomWords = event?.data;
+            this.firstIncompleteString = this.randomWords;
+            this.secondIncompleteString = this.randomWords;
+          }
+          break;
+
         case Events.TYPING: {
           const count = event?.data.length;
           const isFirst = event?.userName === this.firstUser;
@@ -179,19 +196,15 @@ export default class Room extends Vue {
           break;
         }
 
-        case Events.RECEIVED_TEST:
-          if (event?.userName !== userName) {
-            this.firstUser = event?.userName;
-            this.secondUser = userName;
-            this.randomWords = event?.data;
-            this.firstIncompleteString = this.randomWords;
-            this.secondIncompleteString = this.randomWords;
-          }
-          break;
+        case Events.WON: {
+          const timeLapsed = parseInt(event.data);
+          this.firstWPM =
+            (this.firstCompleteString.split(" ").length / timeLapsed) * 60;
+          this.secondWPM =
+            (this.secondCompleteString.split(" ").length / timeLapsed) * 60;
 
-        case Events.INITIATE_START:
-          this.onStartRace();
           break;
+        }
 
         default:
           console.log("Error encountered");
@@ -202,6 +215,7 @@ export default class Room extends Vue {
   initKeyPressListener() {
     const isFirst = this.curUser === this.firstUser;
     type ThisType = { [x: string]: any };
+    this.trackTime();
 
     document.addEventListener("keypress", (event) => {
       if (event.keyCode == 32) event.preventDefault();
@@ -217,7 +231,6 @@ export default class Room extends Vue {
           ]
         );
         console.log(data);
-        if (data === this.randomWords) this.onWon();
         this.ws?.send(
           JSON.stringify({
             event: Events.TYPING,
@@ -225,6 +238,7 @@ export default class Room extends Vue {
             userName: this.curUser
           } as EventResponse)
         );
+        if (data === this.randomWords) this.onWon();
       } else {
         this.incompleteTextColor = "red";
         setTimeout(() => (this.incompleteTextColor = "white"), 100);
@@ -256,9 +270,26 @@ export default class Room extends Vue {
     this.ws?.send(
       JSON.stringify({
         event: Events.WON,
-        userName: this.curUser
+        userName: this.curUser,
+        data: String(this.time)
       } as EventResponse)
     );
+  }
+
+  trackTime() {
+    const track = setInterval(() => {
+      this.time++;
+
+      if (
+        (this as { [x: string]: any })[
+          `${
+            this.curUser === this.firstUser ? "first" : "second"
+          }CompleteString`
+        ] === this.randomWords
+      ) {
+        window.clearInterval(track);
+      }
+    }, 1000);
   }
 }
 </script>
