@@ -96,6 +96,7 @@
         </div>
       </v-col>
     </v-row>
+    <error-dialog :dialog="error" />
     <v-alert :value="showAlert" dense elevation="15" type="success" id="alert">
       {{ newJoinedUser }} joined room
     </v-alert>
@@ -114,16 +115,18 @@
 import { Vue, Component } from "vue-property-decorator";
 import RandomWords from "random-words";
 import { API_ENDPOINTS, Events, EventResponse } from "@/configs";
-import { RoomDialog, WonDialog } from "../components";
+import { RoomDialog, WonDialog, ErrorDialog } from "../components";
 
 @Component({
   components: {
     RoomDialog,
-    WonDialog
+    WonDialog,
+    ErrorDialog
   }
 })
 export default class Room extends Vue {
   ws: WebSocket | null = null;
+  error = false;
   curUser = "";
   roomId = this.$route.params.id;
   firstUser = "";
@@ -146,6 +149,12 @@ export default class Room extends Vue {
 
   onJoin(userName: string) {
     const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId, userName));
+
+    this.listenToSocketMessages(ws, userName);
+    this.listenToSocketErrors(ws);
+  }
+
+  listenToSocketMessages(ws: WebSocket, userName: string) {
     this.ws = ws;
     this.curUser = userName;
 
@@ -223,6 +232,12 @@ export default class Room extends Vue {
           console.log("Error encountered");
       }
     });
+  }
+
+  listenToSocketErrors(ws: WebSocket) {
+    ws.onerror = () => {
+      this.error = true;
+    };
   }
 
   initKeyPressListener() {
