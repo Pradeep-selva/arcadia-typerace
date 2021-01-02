@@ -25,6 +25,14 @@
             </v-col>
           </v-row>
           <v-row>
+            <v-col cols="12" class="d-flex align-center justify-center">
+              <h4>
+                **NOTE: Wrongly entered characters will not be read. Simply
+                enter the next right character to continue typing
+              </h4>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col cols="12">
               <v-text-field
                 label="Your name*"

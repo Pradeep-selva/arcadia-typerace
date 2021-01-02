@@ -114,7 +114,7 @@
           <span class="green--text">
             {{ firstCompleteString }}
           </span>
-          <span class="yellow--text text--lighten-3">
+          <span class="yellow--text text--lighten-3" id="cursor">
             |
           </span>
           <span
@@ -131,7 +131,7 @@
           <span class="green--text">
             {{ secondCompleteString }}
           </span>
-          <span class="yellow--text text--lighten-3">
+          <span class="yellow--text text--lighten-3" id="cursor">
             |
           </span>
           <span
@@ -410,5 +410,9 @@ export default class Room extends Vue {
   position: fixed;
   bottom: 50px;
   left: 100px;
+}
+
+#cursor {
+  font-weight: 400;
 }
 </style>
