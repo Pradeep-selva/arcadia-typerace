@@ -15,16 +15,44 @@
     justify-center"
     >
       <span class="mr-3">ROOM</span>
-      <span class="grey--text text--lighten-2">{{ roomId }}</span>
+      <span class="text--lighten-2">{{ roomId }}</span>
     </h1>
     <div
       class="d-flex 
     justify-center 
     mb-5 mt-5"
+      v-if="!!firstUser && !!secondUser"
     >
-      <v-btn class="start-btn" color="grey lighten-1" outlined x-large>
+      <v-btn
+        class="start-btn"
+        color="grey lighten-1"
+        outlined
+        x-large
+        @click="onPressStart"
+        v-if="firstUser === curUser && counter == null"
+      >
         start race
       </v-btn>
+      <div
+        class="display-1 green--text mb-5 mt-5"
+        v-if="firstUser !== curUser && counter == null"
+      >
+        Please be patient while the room owner starts race...
+      </div>
+      <div
+        id="counter"
+        class="display-4 green--text mb-5 mt-5"
+        v-if="counter !== null && counter !== 0"
+      >
+        Starts in {{ counter }}
+      </div>
+      <div
+        id="counter"
+        class="display-4 green--text mb-5 mt-5"
+        v-if="counter === 0"
+      >
+        Start Typing
+      </div>
     </div>
     <div
       class="d-flex 
@@ -78,6 +106,8 @@ import { RoomDialog } from "../components";
   }
 })
 export default class Room extends Vue {
+  ws: WebSocket | null = null;
+  curUser = "";
   roomId = this.$route.params.id;
   firstUser = "";
   secondUser = "";
@@ -87,29 +117,15 @@ export default class Room extends Vue {
   newJoinedUser = "";
   showAlert = false;
   completeString = "";
+  counter: number | null = null;
   enteredTextCount = 0;
 
   onJoin(userName: string) {
     const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId, userName));
+    this.ws = ws;
+    this.curUser = userName;
 
     this.firstUser = userName;
-
-    document.addEventListener("keypress", (event) => {
-      if (event.keyCode == 32) event.preventDefault();
-
-      if (event.key === this.incompleteString[0])
-        ws.send(
-          JSON.stringify({
-            event: Events.TYPING,
-            data: this.randomWords.slice(0, ++this.enteredTextCount),
-            userName: userName
-          } as EventResponse)
-        );
-      else {
-        this.incompleteTextColor = "red";
-        setTimeout(() => (this.incompleteTextColor = "white"), 100);
-      }
-    });
 
     ws.addEventListener("message", (e) => {
       console.log(e);
@@ -153,10 +169,53 @@ export default class Room extends Vue {
           }
           break;
 
+        case Events.INITIATE_START:
+          this.onStartRace();
+          break;
+
         default:
           console.log("Error encountered");
       }
     });
+  }
+
+  initKeyPressListener() {
+    document.addEventListener("keypress", (event) => {
+      if (event.keyCode == 32) event.preventDefault();
+
+      if (event.key === this.incompleteString[0])
+        this.ws?.send(
+          JSON.stringify({
+            event: Events.TYPING,
+            data: this.randomWords.slice(0, ++this.enteredTextCount),
+            userName: this.curUser
+          } as EventResponse)
+        );
+      else {
+        this.incompleteTextColor = "red";
+        setTimeout(() => (this.incompleteTextColor = "white"), 100);
+      }
+    });
+  }
+
+  onPressStart() {
+    this.ws?.send(
+      JSON.stringify({
+        event: Events.INITIATE_START
+      })
+    );
+  }
+
+  onStartRace() {
+    this.counter = 3;
+    const interval = setInterval(() => {
+      (this.counter as number)--;
+
+      if (this.counter === 0) {
+        window.clearInterval(interval);
+        this.initKeyPressListener();
+      }
+    }, 1000);
   }
 }
 </script>
