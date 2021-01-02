@@ -57,7 +57,7 @@ export default class JoinDialog extends Vue {
   error = "";
 
   onConfirm() {
-    if (this.roomCode.length === 6 && !!this.roomCode)
+    if (this.roomCode.length <= 7 && this.roomCode.length >= 6)
       this.$router.push({
         name: ROUTE_NAMES.validate,
         params: {

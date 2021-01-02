@@ -41,7 +41,7 @@
             text
             icon
             color="blue darken-3"
-            @click="_goHome"
+            @click="onHome"
             v-bind="attrs"
             v-on="on"
           >
@@ -172,7 +172,7 @@ import { copyToClipBoard, goHome } from "@/services";
 })
 export default class Room extends Vue {
   ws: WebSocket | null = null;
-  _goHome = goHome;
+  onHome = goHome;
   error = false;
   curUser = "";
   roomId = this.$route.params.id;
