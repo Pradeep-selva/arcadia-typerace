@@ -20,11 +20,22 @@
     <div
       class="d-flex 
     justify-center 
-    mb-10 mt-5"
+    mb-5 mt-5"
     >
-      <v-btn class="start-btn" color="grey lighten-1 mb-16" outlined x-large>
+      <v-btn class="start-btn" color="grey lighten-1" outlined x-large>
         start race
       </v-btn>
+    </div>
+    <div
+      class="d-flex 
+    display-2
+    justify-center
+    grey--text
+    text--lighten-1 
+    mb-10 mt-5"
+      v-if="!!firstUser && !!secondUser"
+    >
+      {{ firstUser }} vs. {{ secondUser }}
     </div>
     <v-divider light class="mb-10" id="divider" />
     <v-row justify="space-around" class="d-flex flex-row">
@@ -68,6 +79,8 @@ import { RoomDialog } from "../components";
 })
 export default class Room extends Vue {
   roomId = this.$route.params.id;
+  firstUser = "";
+  secondUser = "";
   randomWords = (RandomWords(30) as string[]).join(" ");
   incompleteString = this.randomWords;
   incompleteTextColor = "white";
@@ -78,6 +91,8 @@ export default class Room extends Vue {
 
   onJoin(userName: string) {
     const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId, userName));
+
+    this.firstUser = userName;
 
     document.addEventListener("keypress", (event) => {
       if (event.keyCode == 32) event.preventDefault();
@@ -102,6 +117,17 @@ export default class Room extends Vue {
 
       switch (event.event) {
         case Events.JOIN:
+          if (event?.userName !== userName) {
+            this.secondUser = event?.userName;
+            ws.send(
+              JSON.stringify({
+                event: Events.RECEIVED_TEST,
+                data: this.randomWords,
+                userName
+              } as EventResponse)
+            );
+          }
+
           this.newJoinedUser = event?.userName;
           this.showAlert = true;
           setTimeout(() => (this.showAlert = false), 2000);
@@ -117,6 +143,15 @@ export default class Room extends Vue {
           this.completeString = this.randomWords.slice(0, count);
           break;
         }
+
+        case Events.RECEIVED_TEST:
+          if (event?.userName !== userName) {
+            this.firstUser = event?.userName;
+            this.secondUser = userName;
+            this.randomWords = event?.data;
+            this.incompleteString = this.randomWords;
+          }
+          break;
 
         default:
           console.log("Error encountered");
