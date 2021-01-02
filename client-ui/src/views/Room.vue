@@ -99,6 +99,14 @@
     <v-alert :value="showAlert" dense elevation="15" type="success" id="alert">
       {{ newJoinedUser }} joined room
     </v-alert>
+    <won-dialog
+      :dialog="!!firstWPM && !!secondWPM"
+      :first="firstUser"
+      :second="secondUser"
+      :firstWPM="firstWPM"
+      :secondWPM="secondWPM"
+      :winner="winner"
+    />
   </v-container>
 </template>
 
@@ -106,11 +114,12 @@
 import { Vue, Component } from "vue-property-decorator";
 import RandomWords from "random-words";
 import { API_ENDPOINTS, Events, EventResponse } from "@/configs";
-import { RoomDialog } from "../components";
+import { RoomDialog, WonDialog } from "../components";
 
 @Component({
   components: {
-    RoomDialog
+    RoomDialog,
+    WonDialog
   }
 })
 export default class Room extends Vue {
@@ -133,6 +142,7 @@ export default class Room extends Vue {
   time = 0;
   firstWPM = 0;
   secondWPM = 0;
+  winner = "";
 
   onJoin(userName: string) {
     const ws = new WebSocket(API_ENDPOINTS.socket(this.roomId, userName));
@@ -198,10 +208,13 @@ export default class Room extends Vue {
 
         case Events.WON: {
           const timeLapsed = parseInt(event.data);
-          this.firstWPM =
-            (this.firstCompleteString.split(" ").length / timeLapsed) * 60;
-          this.secondWPM =
-            (this.secondCompleteString.split(" ").length / timeLapsed) * 60;
+          this.winner = event.userName;
+          this.firstWPM = Math.floor(
+            (this.firstCompleteString.split(" ").length / timeLapsed) * 60
+          );
+          this.secondWPM = Math.floor(
+            (this.secondCompleteString.split(" ").length / timeLapsed) * 60
+          );
 
           break;
         }
