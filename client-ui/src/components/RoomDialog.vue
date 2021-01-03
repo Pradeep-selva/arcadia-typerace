@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" max-width="400px" persistent>
     <v-card>
       <v-card-title>
-        <span class="headline">Create A Room</span>
+        <span class="headline">Welcome to {{ roomCode }}</span>
       </v-card-title>
       <v-card-text>
         <v-container>
