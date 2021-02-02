@@ -10,8 +10,6 @@ import (
 var upgrader = utils.GetUpgrader()
 
 func ServeWs(w http.ResponseWriter, r *http.Request, roomId string, userName string) {
-	utils.LogSuccess("ROOM --> " + roomId)
-
 	socket, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		utils.LogError("Error occurred while connecting to room: " + roomId)
@@ -45,7 +43,6 @@ func ServeWs(w http.ResponseWriter, r *http.Request, roomId string, userName str
 	}
 
 	_s := subscription(s)
-	utils.LogSuccess(_s.Room)
 	go _s.readPump()
 	go _s.writePump()
 }

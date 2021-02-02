@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/pradeep-selva/arcadia-typerace/ws-server/configs"
@@ -21,12 +20,6 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 	roomId := strings.Split(r.URL.Path, "/")[4]
 	userName := strings.Split(r.URL.Path, "/")[5]
 	userCount := len(ws.H.Rooms[roomId])
-
-	utils.LogSuccess(
-		"Number of users in room "+
-		roomId+": "+
-		strconv.Itoa(userCount),
-	)
 
 	if userCount <= 1 {
 		ws.ServeWs(w,r,roomId, userName)
@@ -50,7 +43,6 @@ func RoomValidationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.LogSuccess("Validation passed. -- >"+valType+"< -- >"+roomId+"< --")
 	json.NewEncoder(w).Encode(t.ValidationResponse{
 		Data: "Validation passed.",
 		Ok: true,
