@@ -6,6 +6,6 @@ ADD . /arcadia-typerace-server
 
 WORKDIR /arcadia-typerace-server
 
-RUN go build -o main .
+RUN go build -o socket-server .
 
 CMD ["/typerace/socket-server"]
