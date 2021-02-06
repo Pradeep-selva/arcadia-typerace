@@ -165,9 +165,9 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import RandomWords from "random-words";
-import { API_ENDPOINTS, Events, EventResponse } from "@/configs";
+import { API_ENDPOINTS, Events, EventResponse } from "../configs";
 import { RoomDialog, WonDialog, ErrorDialog } from "../components";
-import { copyToClipBoard, goHome } from "@/services";
+import { copyToClipBoard, goHome } from "../services";
 
 @Component({
   components: {

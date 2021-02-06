@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { goHome } from "@/services";
+import { goHome } from "../services";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component

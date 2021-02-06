@@ -22,7 +22,9 @@
 - Vue
 - Vuetify
 - WebSockets
-- GCloud & Firebase
+- Docker
+- Azure
+- Firebase
 
 ## Steps to run locally
 
