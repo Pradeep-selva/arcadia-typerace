@@ -23,7 +23,7 @@
 - Vuetify
 - WebSockets
 - Docker
-- Azure
+- Heroku
 - Firebase
 
 ## Steps to run locally
