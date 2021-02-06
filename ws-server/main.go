@@ -17,15 +17,16 @@ func main() {
 	//home
 	http.HandleFunc("/", controllers.HomeHandler)
 	//socket
-	http.Handle(utils.GetApiPath("/ws/"), 
+	http.Handle(utils.GetApiPath("/ws/"),
 		utils.Middleware(controllers.SocketHandler))
 	//validation
-	http.Handle(utils.GetApiPath("/validate/"), 
+	http.Handle(utils.GetApiPath("/validate/"),
 		utils.Middleware(controllers.RoomValidationHandler))
 	//test
 	http.Handle("/test/", http.StripPrefix("/test/",
 		http.FileServer(http.Dir("../client"))),
 	)
+	http.HandleFunc("/.well-known/pki-validation/869F50E3127FCA731973303536208C2D.txt", controllers.VerifyDNS)
 
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -34,7 +35,7 @@ func main() {
 
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
-		PORT = "5500"
+		PORT = "80"
 	}
 	utils.LogSuccess("Listening on port :" + PORT)
 	log.Println(http.ListenAndServe(":"+PORT, nil))

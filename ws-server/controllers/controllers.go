@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/pradeep-selva/arcadia-typerace/ws-server/configs"
@@ -22,7 +23,7 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 	userCount := len(ws.H.Rooms[roomId])
 
 	if userCount <= 1 {
-		ws.ServeWs(w,r,roomId, userName)
+		ws.ServeWs(w, r, roomId, userName)
 	}
 }
 
@@ -37,14 +38,20 @@ func RoomValidationHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		utils.LogError("Invalid operation blocked.")
 		json.NewEncoder(w).Encode(t.ValidationResponse{
-			Data: err.Error(), 
-			Ok: false,
+			Data: err.Error(),
+			Ok:   false,
 		})
 		return
 	}
 
 	json.NewEncoder(w).Encode(t.ValidationResponse{
 		Data: "Validation passed.",
-		Ok: true,
+		Ok:   true,
 	})
+}
+
+func VerifyDNS(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Disposition", "attachment; filename="+strconv.Quote("869F50E3127FCA731973303536208C2D.txt"))
+	w.Header().Set("Content-Type", "application/octet-stream")
+	http.ServeFile(w, r, "869F50E3127FCA731973303536208C2D.txt")
 }
