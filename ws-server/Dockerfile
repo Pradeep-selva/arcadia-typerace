@@ -10,4 +10,4 @@ RUN go mod vendor
 
 RUN go build -o socket-server .
 
-CMD ["/typerace/socket-server"]
+CMD ["/arcadia-typerace-server/socket-server"]
