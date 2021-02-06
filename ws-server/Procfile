@@ -1,1 +1,1 @@
-web: bin/arcadia-typerace
+web: bin/ws-server

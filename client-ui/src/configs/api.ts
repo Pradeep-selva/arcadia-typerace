@@ -2,8 +2,8 @@ import { SECRETS } from "@/secrets";
 import { PRODUCTION } from "./environment";
 
 const URL = PRODUCTION ? SECRETS.API_URL : "localhost:5500";
-export const BASE_URL = `http://${URL}`;
-const SOCKET_URL = `ws://${URL}`;
+export const BASE_URL = `${PRODUCTION ? "https" : "http"}://${URL}`;
+const SOCKET_URL = `${PRODUCTION ? "wss" : "ws"}://${URL}`;
 
 export const DEPLOYED_URL = PRODUCTION
   ? "https://arcadia-typerace.web.app"

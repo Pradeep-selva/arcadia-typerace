@@ -39,11 +39,6 @@ func Middleware(next http.HandlerFunc) http.Handler {
 			x_api_key := os.Getenv("X_API_KEY")
 			if err != nil {
 				LogError("An error occured while initializing .env")
-				json.NewEncoder(w).Encode(t.ValidationResponse{
-					Data: "An error occurred",
-					Ok: false,
-				})
-				return
 			}
 
 			header_x_api_key := r.Header.Get("x-api-key")

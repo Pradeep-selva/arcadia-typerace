@@ -30,7 +30,7 @@ func main() {
 
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatalln("An error occurred while reading .env")
+		utils.LogError("An error occurred while reading .env")
 	}
 
 	PORT := os.Getenv("PORT")
