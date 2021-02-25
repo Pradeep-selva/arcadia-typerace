@@ -96,51 +96,94 @@
         Start Typing
       </div>
     </div>
-    <div
-      class="d-flex 
-    display-2
-    justify-center
-    grey--text
-    text--lighten-1 
-    mb-10 mt-5"
-      v-if="!!firstUser && !!secondUser"
-    >
-      {{ firstUser }} vs. {{ secondUser }}
-    </div>
     <v-divider light class="mb-10" id="divider" />
     <v-row justify="space-around" class="d-flex flex-row">
-      <v-col class="editor" sm="5">
-        <div class="grey--text text--lighten-2 display-2">
-          <span class="green--text">
-            {{ firstCompleteString }}
-          </span>
-          <span class="yellow--text text--lighten-3" id="cursor">
-            |
-          </span>
-          <span
-            :class="
-              `${curUser === firstUser ? incompleteTextColor : 'white'}--text`
-            "
-          >
-            {{ firstIncompleteString }}
-          </span>
+      <v-col sm="5">
+        <div
+          class="d-flex 
+          display-1
+          justify-center
+          grey--text
+          text--lighten-1 
+          mb-1"
+          v-if="!!firstUser && !!secondUser"
+        >
+          {{ firstUser }}
+        </div>
+        <div class="editor">
+          <div class="grey--text text--lighten-2 display-med">
+            <span class="green--text" style="margin-right:-10px;">
+              {{ firstCompleteString }}
+            </span>
+            <span class="yellow--text text--lighten-3" id="cursor">
+              |
+            </span>
+            <span
+              :class="
+                `${curUser === firstUser ? incompleteTextColor : 'white'}--text`
+              "
+              :style="
+                firstIncompleteString[0] !== ' ' ||
+                firstCompleteString.endsWith(' ')
+                  ? 'margin-left:-10px;margin-right:-10px;'
+                  : 'margin-right:-10px;'
+              "
+            >
+              {{ firstIncompleteString }}
+            </span>
+          </div>
         </div>
       </v-col>
-      <v-col class="editor" sm="5">
-        <div class="grey--text text--lighten-2 display-2">
-          <span class="green--text">
-            {{ secondCompleteString }}
-          </span>
-          <span class="yellow--text text--lighten-3" id="cursor">
-            |
-          </span>
-          <span
-            :class="
-              `${curUser === secondUser ? incompleteTextColor : 'white'}--text`
-            "
-          >
-            {{ secondIncompleteString }}
-          </span>
+      <v-col>
+        <div
+          class="d-flex 
+          display-1
+          justify-center
+          grey--text
+          text--lighten-1 
+          mb-1"
+        >
+          vs.
+        </div>
+      </v-col>
+      <v-col sm="5">
+        <div
+          class="d-flex 
+          display-1
+          justify-center
+          grey--text
+          text--lighten-1 
+          mb-1"
+          v-if="!!firstUser && !!secondUser"
+        >
+          {{ secondUser }}
+        </div>
+        <div class="editor">
+          <div class="grey--text text--lighten-2 display-med">
+            <span
+              class="green--text"
+              style="margin-left:-10px;margin-right:-10px;"
+            >
+              {{ secondCompleteString.replaceAll(" ", "_ ") }}
+            </span>
+            <span
+              class="yellow--text text--lighten-3"
+              style="margin:0;padding:0"
+              id="cursor"
+            >
+              |
+            </span>
+            <span
+              :class="
+                `${
+                  curUser === secondUser ? incompleteTextColor : 'white'
+                }--text`
+              "
+              style="margin-left:-10px;margin-right:-10px;"
+            >
+              {{ secondIncompleteString }}
+            </span>
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -402,6 +445,10 @@ export default class Room extends Vue {
   max-width: 10vw;
 }
 
+.display-med {
+  font-size: 2.2rem;
+}
+
 #divider {
   border-color: #8e8c91;
 }
@@ -413,6 +460,6 @@ export default class Room extends Vue {
 }
 
 #cursor {
-  font-weight: 400;
+  font-weight: 50;
 }
 </style>

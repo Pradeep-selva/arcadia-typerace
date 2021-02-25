@@ -27,8 +27,10 @@
           <v-row>
             <v-col cols="12" class="d-flex align-center justify-center">
               <h4>
-                **NOTE: Wrongly entered characters will not be read. Simply
-                enter the next right character to continue typing
+                **NOTE:<br />
+                1. Wrongly entered characters will not be read. Simply enter the
+                next right character to continue typing<br />2. Completed spaces
+                will be represented by _
               </h4>
             </v-col>
           </v-row>
