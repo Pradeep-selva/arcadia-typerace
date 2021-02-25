@@ -112,7 +112,14 @@
         </div>
         <div class="editor">
           <div class="grey--text text--lighten-2 display-med">
-            <span class="green--text" style="margin-right:-10px;">
+            <span
+              class="green--text"
+              :style="
+                firstCompleteString.endsWith(' ')
+                  ? 'margin-right:0px;'
+                  : 'margin-right:-10px'
+              "
+            >
               {{ firstCompleteString }}
             </span>
             <span class="yellow--text text--lighten-3" id="cursor">
@@ -123,8 +130,7 @@
                 `${curUser === firstUser ? incompleteTextColor : 'white'}--text`
               "
               :style="
-                firstIncompleteString[0] !== ' ' ||
-                firstCompleteString.endsWith(' ')
+                firstIncompleteString[0] !== ' '
                   ? 'margin-left:-10px;margin-right:-10px;'
                   : 'margin-right:-10px;'
               "
@@ -162,9 +168,13 @@
           <div class="grey--text text--lighten-2 display-med">
             <span
               class="green--text"
-              style="margin-left:-10px;margin-right:-10px;"
+              :style="
+                secondCompleteString.endsWith(' ')
+                  ? 'margin-right:0px;'
+                  : 'margin-right:-10px'
+              "
             >
-              {{ secondCompleteString.replaceAll(" ", "_ ") }}
+              {{ secondCompleteString }}
             </span>
             <span
               class="yellow--text text--lighten-3"
@@ -179,7 +189,11 @@
                   curUser === secondUser ? incompleteTextColor : 'white'
                 }--text`
               "
-              style="margin-left:-10px;margin-right:-10px;"
+              :style="
+                secondIncompleteString[0] !== ' '
+                  ? 'margin-left:-10px;margin-right:-10px;'
+                  : 'margin-right:-10px;'
+              "
             >
               {{ secondIncompleteString }}
             </span>
