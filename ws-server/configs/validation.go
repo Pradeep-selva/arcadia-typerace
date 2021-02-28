@@ -12,8 +12,10 @@ var validationTypes = struct {
 func GetIfRequiredUsersPresent(valType string, users int) error {
 	message := ""
 
-	if valType == validationTypes.JOIN || valType == validationTypes.CREATE {
-		message = "Unable to "+valType+" room. Please go to home."
+	if valType == validationTypes.CREATE {
+		message = "Unable to create room. Please go to home and try again."
+	} else if valType == validationTypes.JOIN {
+		message = "This room is already full. Please join/create a different room."
 	} else {
 		message = "Invalid operation encountered. Please go to home."
 	}
